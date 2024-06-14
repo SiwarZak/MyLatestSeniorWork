@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "970412470791",
+    "project_id": "tejwal-b783b",
+    "storage_bucket": "tejwal-b783b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:970412470791:android:9fc79d00bb7886f03c30a2",
+        "android_client_info": {
+          "package_name": "com.example.tejwal"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgdBKguCRBj6veFfUWqpYTTqLKFf32Mh0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -5,8 +5,8 @@ class AppColors{
   static Color grey = Colors.grey;
   static Color white = Colors.white;
   static Color black = Colors.black;
+  static Color camel= const Color.fromARGB(238, 172, 113, 19);
   static Color amber= Colors.amber;
-
   static Color overlayColor = const Color(0x8C72963D);
   static Color lightGray = const Color(0xFFF5F5F5); 
   static Color greenShade = const Color(0xFF089722); 

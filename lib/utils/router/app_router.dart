@@ -1,21 +1,25 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:tejwal/controllers/location_cubit/location_cubit.dart';
+import 'package:tejwal/providers/auth_provider.dart' as provider; //because AuthProvider is defined in two different libraries
 import 'package:tejwal/controllers/attraction_cubit/attraction_cubit.dart';
 import 'package:tejwal/controllers/home_cubit/home_cubit.dart';
+import 'package:tejwal/controllers/signup_cubit/signup_cubit.dart';
 import 'package:tejwal/controllers/trip_cubit/trip_cubit.dart';
 import 'package:tejwal/models/attraction.dart';
 import 'package:tejwal/models/trip.dart';
 import 'package:tejwal/utils/router/app_routes.dart';
 import 'package:tejwal/views/attraction_details/attraction_details_page.dart';
-import 'package:tejwal/views/favorites/farvorites_page.dart';
-import 'package:tejwal/views/home/home_page.dart';
+import 'package:tejwal/views/map/map_page.dart';
 import 'package:tejwal/views/my_plans/my_plans_page.dart';
-import 'package:tejwal/views/my_trips/my_trips_page.dart';
 import 'package:tejwal/views/other_pages/not_found_page.dart';
 import 'package:tejwal/views/other_pages/bottom_navigation_bar.dart';
+import 'package:tejwal/views/password_reset/password_reset.dart';
+import 'package:tejwal/views/signin_signup/login_page.dart';
 import 'package:tejwal/views/signin_signup/signup_page.dart';
+import 'package:tejwal/views/signin_with_google/signin_with_google.dart';
 import 'package:tejwal/views/trip_details/trip_details_page.dart';
 import 'package:tejwal/views/user_interests/userInterestsPage.dart';
 
@@ -58,8 +62,11 @@ class AppRouter {
                     BlocProvider<TripCubit>(
                       create: (context) => TripCubit()..loadFavorites(),
                     ),
+                    // BlocProvider<LocationCubit>(
+                    //   create: (context) => LocationCubit()..getUserLocation(),
+                    // ),
                   ],
-                  child:  BottomNavigationbar(),
+                  child:  const BottomNavigationbar(),
                 ),
             settings: settings);
 
@@ -89,13 +96,37 @@ class AppRouter {
                 ),
             settings: settings);
 
-       case AppRoutes.signUp:
+      case AppRoutes.map:
         return MaterialPageRoute(
-            builder: (_) => SignUpPage(), settings: settings);
+                    builder: (context) => BlocProvider(
+                      create: (context) => LocationCubit(),
+                      child: const MapPage()),
+                    settings: settings
+              );
+
+      case AppRoutes.signUp:
+        return MaterialPageRoute(
+            builder: (context) => BlocProvider<SignupCubit>(
+                  create: (context) => SignupCubit(authProvider: context.read<provider.AuthProvider>()),
+                  child: SignUpPage(),
+                ),
+            settings: settings);
+      
+      case AppRoutes.logIn:
+        return MaterialPageRoute(
+            builder: (_) => LoginPage(), settings: settings);
         
       case AppRoutes.userInterests:
         return MaterialPageRoute(
-            builder: (_) => UserInterestsPage(), settings: settings);
+            builder: (_) => const UserInterestsPage(), settings: settings);
+      
+      case AppRoutes.logInWithGoogle:
+        return MaterialPageRoute(
+            builder: (_) => GoogleSignInPage(), settings: settings);
+
+      case AppRoutes.passwordReset:
+        return MaterialPageRoute(
+            builder: (_) => PasswordResetPage(), settings: settings);
 
       default:
         return MaterialPageRoute(

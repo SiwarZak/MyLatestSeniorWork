@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tejwal/services/recombee_service.dart';
 import 'package:tejwal/models/attraction.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthProvider extends ChangeNotifier {
   bool _isLoading = false;
@@ -21,10 +22,12 @@ class AuthProvider extends ChangeNotifier {
   List<Attraction> get interestBasedAttractions => _interestBasedAttractions;
   List<Attraction> get propertyBasedAttractions => _propertyBasedAttractions;
 
+  final GoogleSignIn _googleSignIn = GoogleSignIn(); // Added GoogleSignIn instance
+
   AuthProvider() {
     _loadCurrentUser();
   }
-
+  
   Future<void> _loadCurrentUser() async {
     final prefs = await SharedPreferences.getInstance();
     final String? userId = prefs.getString('userId');
@@ -69,6 +72,7 @@ class AuthProvider extends ChangeNotifier {
           "fullName": fullName.trim(),
           "email": email.trim(),
           "userId": _currentUser!.uid,
+          "password":password.trim()
         });
         await _saveUserId(_currentUser!.uid);
 
@@ -120,6 +124,65 @@ class AuthProvider extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
+  }  
+
+  // Added Google Sign-In logic
+  Future<void> signInWithGoogle({
+    required VoidCallback onSuccess,
+    required Function(String) onError,
+  }) async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      if (googleUser == null) {
+        // If the user cancels the sign-in
+        onError('Google Sign-In aborted');
+        return;
+      }
+
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
+      _currentUser = userCredential.user;
+
+      if (_currentUser != null) {
+        await _saveUserId(_currentUser!.uid);
+
+        // Check if user data already exists in Firestore
+        var userDoc = await FirebaseFirestore.instance.collection('userData').doc(_currentUser!.uid).get();
+        if (!userDoc.exists) {
+          // Save new user data to Firebase
+          await FirebaseFirestore.instance
+              .collection('userData')
+              .doc(_currentUser!.uid)
+              .set({
+            "fullName": _currentUser!.displayName ?? '',
+            "email": _currentUser!.email ?? '',
+            "userId": _currentUser!.uid,
+          });
+
+          // Save user data to Recombee
+          await _recombeeService.addUserData(_currentUser!.uid, _currentUser!.email ?? '', '', []);
+        }
+
+        await fetchRecommendations(_currentUser!.uid);
+        await fetchCityBasedRecommendations(_currentUser!.uid);
+        await fetchInterestBasedRecommendations(_currentUser!.uid);
+        await fetchPropertyBasedRecommendations(_currentUser!.uid);
+        onSuccess();
+      }
+    } catch (e) {
+      onError(e.toString());
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
   Future<void> fetchRecommendations(String userId) async {
@@ -138,6 +201,28 @@ class AuthProvider extends ChangeNotifier {
       print('Recommended Attractions: $_recommendedAttractions');
     } catch (e) {
       print('Failed to fetch recommendations: $e');
+    }
+  }
+  
+  //Password reset logic
+  Future<void> sendPasswordResetEmail({
+    required String email,
+    required VoidCallback onSuccess,
+    required Function(String) onError,
+  }) async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      onSuccess();
+    } on FirebaseAuthException catch (e) {
+      onError(_handleFirebaseAuthError(e));
+    } catch (e) {
+      onError(e.toString());
+    } finally {
+      _isLoading = false;
+      notifyListeners();
     }
   }
 
@@ -250,3 +335,4 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 }
+

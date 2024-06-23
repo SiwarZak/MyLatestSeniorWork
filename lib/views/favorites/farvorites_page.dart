@@ -49,6 +49,8 @@ class FavoritesPage extends StatelessWidget {
     },
   ];
 
+  FavoritesPage({super.key});
+
   void onArrowTap(BuildContext context, String attractionName) {
     // Define the action to perform when the arrow is clicked
     ScaffoldMessenger.of(context).showSnackBar(
@@ -65,7 +67,7 @@ class FavoritesPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               'مفضلاتي',
               style: TextStyle(
                 color: Colors.green,
@@ -83,7 +85,7 @@ class FavoritesPage extends StatelessWidget {
                     margin: const EdgeInsets.symmetric(vertical: 4.0), 
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
-                      side: BorderSide(
+                      side: const BorderSide(
                         color: Colors.green, // Green border
                         width: 2,
                       ),
@@ -101,7 +103,7 @@ class FavoritesPage extends StatelessWidget {
                       ),
                       title: Text(
                         favorites[index]['name']!,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.black,
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -109,12 +111,12 @@ class FavoritesPage extends StatelessWidget {
                       ),
                       subtitle: Text(
                         favorites[index]['city']!,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.black54,
                         ),
                       ),
                       trailing: IconButton(
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.arrow_forward_ios,
                           color: Colors.green,
                           size: 20,

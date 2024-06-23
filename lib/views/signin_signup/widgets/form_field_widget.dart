@@ -8,7 +8,7 @@ class FormFieldWidget extends StatelessWidget {
   final bool obscureText;
   final String? Function(String?) validator;
 
-  const FormFieldWidget({
+  const FormFieldWidget({super.key, 
     required this.controller,
     required this.hintText,
     required this.icon,
@@ -28,7 +28,7 @@ class FormFieldWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 15.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
                   decoration: BoxDecoration(
                     color: Colors.white.withOpacity(0.8),
                     borderRadius: BorderRadius.circular(30.0),
@@ -44,7 +44,7 @@ class FormFieldWidget extends StatelessWidget {
                         borderSide: BorderSide.none,
                       ),
                       prefixIcon: Icon(icon),
-                      contentPadding: EdgeInsets.symmetric(vertical: 15.0),
+                      contentPadding: const EdgeInsets.symmetric(vertical: 15.0),
                     ),
                     keyboardType: keyboardType,
                     obscureText: obscureText,
@@ -58,7 +58,7 @@ class FormFieldWidget extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
                     child: Text(
                       state.errorText!,
-                      style: TextStyle(color: Colors.red),
+                      style: const TextStyle(color: Colors.red),
                     ),
                   ),
               ],

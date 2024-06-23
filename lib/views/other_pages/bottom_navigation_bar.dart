@@ -32,11 +32,17 @@ class _BottomNavigationbarState extends State<BottomNavigationbar> {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              SizedBox(
-                width: 250,
-                height: 130,
-                child: Image.asset('assets/images/tejwal_logo.png'),
+              Expanded(
+                child: SizedBox(
+                  width: 250,
+                  height: 130,
+                  child: Center(child: Image.asset('assets/images/tejwal_logo.png')),
+                ),
               ),
+              const SizedBox(
+                  width: 20,
+                  height: 130,
+                ),
               IconButton(
                 icon: const Icon(Icons.notifications, color: Colors.black),
                 onPressed: () {},
@@ -94,7 +100,7 @@ class _BottomNavigationbarState extends State<BottomNavigationbar> {
                 ),
               ),
               PersistentTabConfig(
-                screen: TripsPage(),
+                screen: const TripsPage(),
                 item: ItemConfig(
                   icon: const Icon(Icons.place),
                   activeForegroundColor: AppColors.greenShade,
@@ -103,7 +109,7 @@ class _BottomNavigationbarState extends State<BottomNavigationbar> {
                 ),
               ),
               PersistentTabConfig(
-                screen: ExplorePage(),
+                screen: const ExplorePage(),
                 item: ItemConfig(
                   icon: const Icon(Icons.explore),
                   activeForegroundColor: AppColors.greenShade,
@@ -112,7 +118,7 @@ class _BottomNavigationbarState extends State<BottomNavigationbar> {
                 ),
               ),
               PersistentTabConfig(
-                screen: TripsPage(),
+                screen: const TripsPage(),
                 item: ItemConfig(
                   icon: const Icon(Icons.person),
                   activeForegroundColor: AppColors.greenShade,

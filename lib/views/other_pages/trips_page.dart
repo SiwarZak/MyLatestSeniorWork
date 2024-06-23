@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class TripsPage extends StatefulWidget {
+  const TripsPage({super.key});
+
   @override
   _TripsPageState createState() => _TripsPageState();
 }

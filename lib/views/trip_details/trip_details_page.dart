@@ -1,8 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tejwal/controllers/trip_cubit/trip_cubit.dart';
@@ -272,9 +269,9 @@ class TripDetailsPage extends StatelessWidget {
                                     const SizedBox(
                                       width: 4.0,
                                     ),
-                                    Text(
+                                    const Text(
                                       'cccccccccc',
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontSize: 18,
                                       ),
                                     )

@@ -8,6 +8,10 @@ class AppRoutes{
   static const String home = '/home';
   static const String tripDetails = '/trip-details';
   static const String signUp = '/sign-up';
+  static const String logIn = '/log-in';
+  static const String logInWithGoogle = '/login-with-Google';
+  static const String passwordReset= '/password-reset';
   static const String userInterests = '/user-interests';
+  static const String map = '/map';
 
 }

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:tejwal/views/signin_signup/login_page.dart';
 
 class GetStartedPage extends StatelessWidget {
+  const GetStartedPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +23,7 @@ class GetStartedPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   'اكتشف\nكنوز\nمخبأة\nفي فلسطين!',
                   style: TextStyle(
                     fontSize: 36,
@@ -30,7 +32,7 @@ class GetStartedPage extends StatelessWidget {
                     height: 1.2,
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Align(
                   alignment: Alignment.centerRight,
                   child: ElevatedButton(
@@ -42,17 +44,17 @@ class GetStartedPage extends StatelessWidget {
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white.withOpacity(0.3), 
-                      shape: CircleBorder(),
-                      padding: EdgeInsets.all(20),
+                      shape: const CircleBorder(),
+                      padding: const EdgeInsets.all(20),
                     ),
-                    child: Icon(
+                    child: const Icon(
                       Icons.arrow_forward,
                       color: Colors.white,
                       size: 30,
                     ),
                   ),
                 ),
-                SizedBox(height: 40),
+                const SizedBox(height: 40),
               ],
             ),
           ),
@@ -63,7 +65,7 @@ class GetStartedPage extends StatelessWidget {
 }
 
 void main() {
-  runApp(MaterialApp(
+  runApp(const MaterialApp(
     home: GetStartedPage(),
   ));
 }

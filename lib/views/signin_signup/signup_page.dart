@@ -1,17 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:tejwal/providers/auth_provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tejwal/controllers/signup_cubit/signup_cubit.dart';
 import 'package:tejwal/utils/router/app_routes.dart';
-import 'package:tejwal/views/signin_signup/widgets/form_field_widget.dart';
-import 'package:tejwal/views/signin_signup/login_page.dart';
 import 'package:tejwal/utils/snackbar_util.dart';
+import 'package:tejwal/views/signin_signup/login_page.dart';
+import 'package:tejwal/views/signin_signup/widgets/form_field_widget.dart';
 
-class SignUpPage extends StatefulWidget {
-  @override
-  State<SignUpPage> createState() => _SignUpPageState();
-}
-
-class _SignUpPageState extends State<SignUpPage> {
+class SignUpPage extends StatelessWidget {
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -19,24 +14,15 @@ class _SignUpPageState extends State<SignUpPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _agreedToTOS = false;
 
-  @override
-  void dispose() {
-    _fullNameController.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
-    _confirmPasswordController.dispose();
-    super.dispose();
-  }
+  SignUpPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<AuthProvider>(context);
-
     return Scaffold(
       body: Stack(
         children: <Widget>[
           Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage("assets/images/pal10.jpg"),
                 fit: BoxFit.cover,
@@ -50,9 +36,9 @@ class _SignUpPageState extends State<SignUpPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                SizedBox(height: 30.0),
+                const SizedBox(height: 30.0),
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 30.0), 
+                  padding: const EdgeInsets.only(bottom: 30.0),
                   child: Image.asset('assets/images/logo2.png', height: 300),
                 ),
                 Padding(
@@ -72,7 +58,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             return null;
                           },
                         ),
-                        SizedBox(height: 15.0),
+                        const SizedBox(height: 15.0),
                         FormFieldWidget(
                           controller: _emailController,
                           hintText: 'البريد الإلكتروني',
@@ -88,7 +74,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             return null;
                           },
                         ),
-                        SizedBox(height: 15.0),
+                        const SizedBox(height: 15.0),
                         FormFieldWidget(
                           controller: _passwordController,
                           hintText: 'كلمة المرور',
@@ -104,7 +90,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             return null;
                           },
                         ),
-                        SizedBox(height: 15.0),
+                        const SizedBox(height: 15.0),
                         FormFieldWidget(
                           controller: _confirmPasswordController,
                           hintText: 'تأكيد كلمة المرور',
@@ -120,38 +106,42 @@ class _SignUpPageState extends State<SignUpPage> {
                             return null;
                           },
                         ),
-                        SizedBox(height: 30.0),
+                        const SizedBox(height: 30.0),
                         _buildTermsAndConditions(),
-                        SizedBox(height: 15.0),
-                        authProvider.isLoading
-                            ? CircularProgressIndicator()
-                            : ElevatedButton(
-                                style: _buttonStyle(Colors.green),
-                                onPressed: () {
-                                  if (_formKey.currentState!.validate() && _agreedToTOS) {
-                                    authProvider.signUp(
-                                      fullName: _fullNameController.text,
-                                      email: _emailController.text,
-                                      password: _passwordController.text,
-                                      onSuccess: () {
-                                        Navigator.of(context).pushNamed(AppRoutes.userInterests);
-                                        // Navigator.pushReplacement(
-                                        //   context,
-                                        //   MaterialPageRoute(builder: (context) => UserInterestsPage()),
-                                        // );
-                                      },
-                                      onError: (message) {
-                                        showSnackBar(context, message, Colors.red);
-                                      },
-                                    );
-                                  } else if (!_agreedToTOS) {
-                                    showSnackBar(context, 'يجب الموافقة على الشروط والأحكام وسياسة الخصوصية', Colors.red);
-                                  }
-                                },
-                                child: Text('سجل الان', style: TextStyle(fontSize: 18, color: Colors.white)),
-                              ),
-                        SizedBox(height: 15.0),
-                        _buildLoginText(),
+                        const SizedBox(height: 15.0),
+                        BlocBuilder<SignupCubit, SignupState>(
+                          builder: (context, state) {
+                            if (state is SignupLoading) {
+                              return const CircularProgressIndicator();
+                            } else if (state is SignupSuccess) {
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                //Navigator.of(context).pushNamed(AppRoutes.userInterests); //Commented bacuase it saused a problem when loging out after signing up for first time. Which is routing the user to interests page instead of login page
+                              });
+                            } else if (state is SignupFailure) {
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                showSnackBar(context, state.error, Colors.red);
+                              });
+                            }
+                            return ElevatedButton(
+                              style: _buttonStyle(Colors.green),
+                              onPressed: () {
+                                if (_formKey.currentState!.validate() && _agreedToTOS) {
+                                  context.read<SignupCubit>().signUp(
+                                        fullName: _fullNameController.text,
+                                        email: _emailController.text,
+                                        password: _passwordController.text,
+                                      );
+                                  Navigator.of(context).pushNamed(AppRoutes.userInterests);
+                                } else if (!_agreedToTOS) {
+                                  showSnackBar(context, 'يجب الموافقة على الشروط والأحكام وسياسة الخصوصية', Colors.red);
+                                }
+                              },
+                              child: const Text('سجل الان', style: TextStyle(fontSize: 18, color: Colors.white)),
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 15.0),
+                        _buildLoginText(context),
                       ],
                     ),
                   ),
@@ -169,20 +159,24 @@ class _SignUpPageState extends State<SignUpPage> {
       children: [
         Theme(
           data: ThemeData(
-            unselectedWidgetColor: Colors.white, 
+            unselectedWidgetColor: Colors.white,
           ),
-          child: Checkbox(
-            value: _agreedToTOS,
-            activeColor: Colors.green, 
-            checkColor: Colors.white,
-            onChanged: (bool? value) {
-              setState(() {
-                _agreedToTOS = value!;
-              });
+          child: StatefulBuilder(
+            builder: (context, setState) {
+              return Checkbox(
+                value: _agreedToTOS,
+                activeColor: Colors.green,
+                checkColor: Colors.white,
+                onChanged: (bool? value) {
+                  setState(() {
+                    _agreedToTOS = value!;
+                  });
+                },
+              );
             },
           ),
         ),
-        Expanded(
+        const Expanded(
           child: Text(
             'بالتسجيل، أنت توافق على الشروط والأحكام وسياسة الخصوصية',
             style: TextStyle(color: Colors.white70, fontSize: 12),
@@ -192,7 +186,7 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  Widget _buildLoginText() {
+  Widget _buildLoginText(BuildContext context) {
     return GestureDetector(
       onTap: () {
         Navigator.pushReplacement(
@@ -200,7 +194,7 @@ class _SignUpPageState extends State<SignUpPage> {
           MaterialPageRoute(builder: (context) => LoginPage()),
         );
       },
-      child: Text(
+      child: const Text(
         'هل لديك حساب بالفعل؟ تسجيل الدخول',
         style: TextStyle(color: Colors.white70, fontSize: 14, decoration: TextDecoration.underline),
       ),
@@ -209,12 +203,13 @@ class _SignUpPageState extends State<SignUpPage> {
 
   ButtonStyle _buttonStyle(Color color) {
     return ElevatedButton.styleFrom(
-      foregroundColor: Colors.green, 
-      backgroundColor: color, 
+      foregroundColor: Colors.green,
+      backgroundColor: color,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(30.0),
       ),
-      padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+      padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
     );
   }
 }
+

@@ -39,6 +39,8 @@ class MyTripsPage extends StatelessWidget {
     },
   ];
 
+  MyTripsPage({super.key});
+
   void onTripTap(BuildContext context, String tripName) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Clicked on $tripName')),
@@ -54,8 +56,8 @@ class MyTripsPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 24.0, bottom: 8.0),
+            const Padding(
+              padding: EdgeInsets.only(top: 24.0, bottom: 8.0),
               child: Text(
                 'رحلاتي',
                 style: TextStyle(
@@ -74,7 +76,7 @@ class MyTripsPage extends StatelessWidget {
                     margin: const EdgeInsets.symmetric(vertical: 12.0),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
-                      side: BorderSide(
+                      side: const BorderSide(
                         color: Colors.green,
                         width: 2,
                       ),
@@ -92,7 +94,7 @@ class MyTripsPage extends StatelessWidget {
                       ),
                       title: Text(
                         trips[index]['name']!,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.black,
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -103,30 +105,30 @@ class MyTripsPage extends StatelessWidget {
                         children: [
                           Text(
                             trips[index]['description']!,
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.black54,
                             ),
                           ),
-                          SizedBox(height: 4),
+                          const SizedBox(height: 4),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Icon(
+                              const Icon(
                                 Icons.calendar_today,
                                 color: Colors.black54,
                                 size: 16,
                               ),
-                              SizedBox(width: 4),
+                              const SizedBox(width: 4),
                               Text(
                                 trips[index]['day']!,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Colors.black54,
                                 ),
                               ),
-                              SizedBox(width: 8),
+                              const SizedBox(width: 8),
                               Text(
                                 trips[index]['date']!,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Colors.black54,
                                 ),
                               ),
@@ -135,7 +137,7 @@ class MyTripsPage extends StatelessWidget {
                         ],
                       ),
                       trailing: IconButton(
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.arrow_forward_ios,
                           color: Colors.green,
                           size: 20,

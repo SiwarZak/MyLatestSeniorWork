@@ -9,6 +9,8 @@ import 'package:tejwal/views/profile/profile_page.dart';
 import 'dart:math';
 
 class ExplorePage extends StatefulWidget {
+  const ExplorePage({super.key});
+
   @override
   _ExplorePageState createState() => _ExplorePageState();
 }
@@ -72,14 +74,14 @@ class _ExplorePageState extends State<ExplorePage> {
     final authProvider = Provider.of<AuthProvider>(context);
 
     if (authProvider.currentUser == null) {
-      return Center(child: Text('Please log in to view attractions.'));
+      return const Center(child: Text('Please log in to view attractions.'));
     }
 
     return Scaffold(
       body: Column(
         children: [
           // Categories Section
-          Container(
+          SizedBox(
             height: 80,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
@@ -94,7 +96,7 @@ class _ExplorePageState extends State<ExplorePage> {
                   },
                   child: Container(
                     alignment: Alignment.center,
-                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Row(
                       children: [
                         Icon(
@@ -103,7 +105,7 @@ class _ExplorePageState extends State<ExplorePage> {
                               ? Colors.green
                               : Colors.black,
                         ),
-                        SizedBox(width: 5), // Spacer between icon and text
+                        const SizedBox(width: 5), // Spacer between icon and text
                         Text(
                           categories[index]['name'],
                           style: TextStyle(
@@ -123,10 +125,10 @@ class _ExplorePageState extends State<ExplorePage> {
           // Images Grid Section
           Expanded(
             child: isLoading
-                ? Center(child: CircularProgressIndicator())
+                ? const Center(child: CircularProgressIndicator())
                 : GridView.builder(
-                    padding: EdgeInsets.all(4),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    padding: const EdgeInsets.all(4),
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 3, // Number of columns changed to 3
                       crossAxisSpacing: 4, // Horizontal space between items
                       mainAxisSpacing: 4, // Vertical space between items
@@ -170,7 +172,7 @@ class _ExplorePageState extends State<ExplorePage> {
                             return Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(12),
-                                image: DecorationImage(
+                                image: const DecorationImage(
                                   image: AssetImage('assets/images/imagePlaceholder.jpg'),
                                   fit: BoxFit.cover,
                                 ),
@@ -182,7 +184,7 @@ class _ExplorePageState extends State<ExplorePage> {
                             return Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(12),
-                                image: DecorationImage(
+                                image: const DecorationImage(
                                   image: AssetImage('assets/images/imagePlaceholder.jpg'),
                                   fit: BoxFit.cover,
                                 ),

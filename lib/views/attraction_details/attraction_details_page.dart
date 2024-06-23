@@ -153,7 +153,7 @@ class AttractionDetailsPage extends StatelessWidget {
                         return Row(
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
-                            Icon(Icons.check_circle_outline_rounded,
+                            const Icon(Icons.check_circle_outline_rounded,
                                 size: 16, color: Colors.green),
                             const SizedBox(width: 4),
                             Text(

@@ -4,7 +4,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:tejwal/models/attraction.dart';
 import 'package:tejwal/utils/router/app_routes.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tejwal/controllers/attraction_cubit/attraction_cubit.dart';
 import 'package:tejwal/utils/app_colors.dart';
 

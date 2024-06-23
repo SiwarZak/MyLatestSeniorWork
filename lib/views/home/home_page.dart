@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:tejwal/controllers/attraction_cubit/attraction_cubit.dart';
 import 'package:tejwal/controllers/home_cubit/home_cubit.dart';
-import 'package:tejwal/controllers/trip_cubit/trip_cubit.dart';
 import 'package:tejwal/providers/auth_provider.dart';
 import 'package:tejwal/views/home/widgets/section_with_title_and_containers.dart';
 

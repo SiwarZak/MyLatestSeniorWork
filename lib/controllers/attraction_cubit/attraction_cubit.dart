@@ -6,7 +6,7 @@ import 'package:meta/meta.dart';
 part 'attraction_state.dart';
 
 class AttractionCubit extends Cubit<AttractionState> {
-  AttractionCubit() : super(AttractionInitial({})) { //this block is to load favorites from firebase as the user logs in, so that favorites are not lost after logging out and in again
+  AttractionCubit() : super(AttractionInitial(const {})) { //this block is to load favorites from firebase as the user logs in, so that favorites are not lost after logging out and in again
     _auth.authStateChanges().listen((user) {
       if (user != null) {
         loadFavorites();
@@ -35,7 +35,7 @@ class AttractionCubit extends Cubit<AttractionState> {
 
       emit(AttractionFavoriteStatusChanged(favorites));
     } catch (e) {
-      emit(AttractionFavoriteStatusChanged({}, error: e.toString()));
+      emit(AttractionFavoriteStatusChanged(const {}, error: e.toString()));
     }
   }
 
@@ -44,7 +44,7 @@ class AttractionCubit extends Cubit<AttractionState> {
       bool isFavorite = await _isFavorite(attractionId);
       _updateFavoriteStatus(attractionId, isFavorite);
     } catch (e) {
-      emit(AttractionFavoriteStatusChanged({}, error: e.toString()));
+      emit(AttractionFavoriteStatusChanged(const {}, error: e.toString()));
     }
   }
 
@@ -74,7 +74,7 @@ class AttractionCubit extends Cubit<AttractionState> {
       }
       _updateFavoriteStatus(attractionId, isFavorite);
     } catch (e) {
-      emit(AttractionFavoriteStatusChanged({}, error: e.toString()));
+      emit(AttractionFavoriteStatusChanged(const {}, error: e.toString()));
     }
   }
 
